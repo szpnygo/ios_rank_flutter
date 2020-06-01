@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class AppPage extends StatefulWidget {
   static String routeName = '/app';
@@ -15,9 +17,9 @@ class AppState extends State<AppPage> {
 
   int _bottomSelectedIndex = 2;
 
-  AppState() {
-    print("AppState");
-  }
+  bool _isLoading = false;
+
+  AppState() {}
 
   @override
   void initState() {
@@ -76,12 +78,32 @@ class AppState extends State<AppPage> {
         unselectedIconTheme: IconThemeData(color: Colors.grey[400]),
         type: BottomNavigationBarType.fixed,
       ),
-      body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return _itemWidget(index);
-        },
-        itemCount: _appList.length,
+      body: Stack(
+        children: <Widget>[
+          _buildListView(),
+          Offstage(
+            offstage: !_isLoading,
+            child: Container(
+              color: Color.fromRGBO(255, 255, 255, 65),
+              child: Center(
+                child: LoadingJumpingLine.circle(
+                  duration: const Duration(milliseconds: 1000),
+                  backgroundColor: Colors.lightBlue,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  ListView _buildListView() {
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        return _itemWidget(index);
+      },
+      itemCount: _appList.length,
     );
   }
 
@@ -149,11 +171,15 @@ class AppState extends State<AppPage> {
   }
 
   _requestData() async {
+    setState(() {
+      _isLoading = true;
+    });
     print("request");
     var url = _getRequestUrl();
     var response = await Dio().get(url);
     setState(() {
       _appList = response.data["feed"]["results"];
+      _isLoading = false;
     });
   }
 
