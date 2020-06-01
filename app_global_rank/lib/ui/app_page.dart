@@ -67,7 +67,64 @@ class AppState extends State<AppPage> {
         unselectedIconTheme: IconThemeData(color: Colors.grey[400]),
         type: BottomNavigationBarType.fixed,
       ),
-      body: Text("data"),
+      body: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return _itemWidget(index);
+        },
+        itemCount: 5,
+      ),
+    );
+  }
+
+  Padding _itemWidget(int index) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 32, right: 32, top: 12, bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Image.network(
+            "https://www.smemo.info/icon.png",
+            width: 72,
+            height: 72,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12, top: 2),
+            child: Text(
+              (index + 1).toString(),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "跑跑卡丁车跑跑卡丁车跑跑卡丁车跑跑卡丁车跑跑卡丁车",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      "游戏",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
