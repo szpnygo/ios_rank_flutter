@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class AppPage extends StatefulWidget {
@@ -10,7 +11,19 @@ class AppPage extends StatefulWidget {
 }
 
 class AppState extends State<AppPage> {
+  List<dynamic> _appList = List<dynamic>();
+
   int _bottomSelectedIndex = 2;
+
+  AppState() {
+    print("AppState");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _requestData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +66,7 @@ class AppState extends State<AppPage> {
               icon: Icon(Icons.shopping_cart), title: Text("付费排行")),
         ],
         currentIndex: _bottomSelectedIndex,
-        onTap: (index) => {
-          setState(() {
-            _bottomSelectedIndex = index;
-          })
-        },
+        onTap: (index) => {_bottomClick(index)},
         unselectedFontSize: 12,
         selectedFontSize: 14,
         selectedItemColor: Colors.blue,
@@ -71,21 +80,32 @@ class AppState extends State<AppPage> {
         itemBuilder: (BuildContext context, int index) {
           return _itemWidget(index);
         },
-        itemCount: 5,
+        itemCount: _appList.length,
       ),
     );
   }
 
+  _bottomClick(index) {
+    setState(() {
+      _bottomSelectedIndex = index;
+    });
+    _requestData();
+  }
+
   Padding _itemWidget(int index) {
+    var item = _appList[index];
     return Padding(
       padding: const EdgeInsets.only(left: 32, right: 32, top: 12, bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Image.network(
-            "https://www.smemo.info/icon.png",
-            width: 72,
-            height: 72,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.network(
+              item["artworkUrl100"],
+              width: 72,
+              height: 72,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12, top: 2),
@@ -101,7 +121,7 @@ class AppState extends State<AppPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "跑跑卡丁车跑跑卡丁车跑跑卡丁车跑跑卡丁车跑跑卡丁车",
+                    item["name"],
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -112,7 +132,7 @@ class AppState extends State<AppPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      "游戏",
+                      item["genres"][0]["name"],
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey[500],
@@ -126,5 +146,63 @@ class AppState extends State<AppPage> {
         ],
       ),
     );
+  }
+
+  _requestData() async {
+    print("request");
+    var url = _getRequestUrl();
+    var response = await Dio().get(url);
+    setState(() {
+      _appList = response.data["feed"]["results"];
+    });
+  }
+
+  String _getRequestUrl() {
+    var country = "cn";
+    var url = "";
+    switch (_bottomSelectedIndex) {
+      case 0:
+        {
+          url = "https://rss.itunes.apple.com/api/v1/" +
+              country +
+              "/ios-apps/new-apps-we-love/all/100/explicit.json";
+        }
+        break;
+      case 1:
+        {
+          url = "https://rss.itunes.apple.com/api/v1/" +
+              country +
+              "/ios-apps/new-games-we-love/all/100/explicit.json";
+        }
+        break;
+      case 2:
+        {
+          url = "https://rss.itunes.apple.com/api/v1/" +
+              country +
+              "/ios-apps/top-free/all/100/explicit.json";
+        }
+        break;
+      case 3:
+        {
+          url = "https://rss.itunes.apple.com/api/v1/" +
+              country +
+              "/ios-apps/top-grossing/all/100/explicit.json";
+        }
+        break;
+      case 4:
+        {
+          url = "https://rss.itunes.apple.com/api/v1/" +
+              country +
+              "/ios-apps/top-paid/all/100/explicit.json";
+        }
+        break;
+      default:
+        {
+          url = "https://rss.itunes.apple.com/api/v1/" +
+              country +
+              "/ios-apps/top-free/all/100/explicit.json";
+        }
+    }
+    return url;
   }
 }
