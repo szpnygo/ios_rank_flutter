@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rank/ui/app_page.dart';
+import 'package:rank/ui/detail_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,8 +22,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white,
           primaryColor: Colors.white,
           accentColor: Colors.white,
-          scaffoldBackgroundColor: Colors.white
-      ),
+          scaffoldBackgroundColor: Colors.white),
       initialRoute: AppPage.routeName,
       routes: {
         AppPage.routeName: (BuildContext context) => AppPage(),

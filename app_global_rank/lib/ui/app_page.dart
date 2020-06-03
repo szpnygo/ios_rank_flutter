@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:rank/ui/detail_page.dart';
 
 class AppPage extends StatefulWidget {
   static String routeName = '/app';
@@ -114,58 +115,76 @@ class AppState extends State<AppPage> {
     _requestData();
   }
 
-  Padding _itemWidget(int index) {
+  _itemWidget(int index) {
     var item = _appList[index];
-    return Padding(
-      padding: const EdgeInsets.only(left: 32, right: 32, top: 12, bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              item["artworkUrl100"],
-              width: 72,
-              height: 72,
-            ),
+    return InkWell(
+      onTap: () => {
+        Navigator.of(context).push(
+          new PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 200),
+            pageBuilder: (BuildContext context, Animation animation,
+                Animation secondaryAnimation) {
+              return FadeTransition(
+                //使用渐隐渐入过渡,
+                opacity: animation,
+                child: DetailPage(item["id"]), //路由B
+              );
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12, top: 2),
-            child: Text(
-              (index + 1).toString(),
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    item["name"],
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      item["genres"][0]["name"],
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey[500],
-                      ),
-                    ),
-                  ),
-                ],
+        ),
+      },
+      child: Padding(
+        padding:
+            const EdgeInsets.only(left: 32, right: 32, top: 12, bottom: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.network(
+                item["artworkUrl100"],
+                width: 72,
+                height: 72,
               ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12, top: 2),
+              child: Text(
+                (index + 1).toString(),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      item["name"],
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        item["genres"][0]["name"],
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
