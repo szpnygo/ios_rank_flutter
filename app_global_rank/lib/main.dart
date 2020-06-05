@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rank/model/country.dart';
 import 'package:rank/ui/app_page.dart';
-import 'package:rank/ui/detail_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => CountryModel(),
+      )
+    ],
+    child: MyApp(),
+  ));
+
   SystemUiOverlayStyle style = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,

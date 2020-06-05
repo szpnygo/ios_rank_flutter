@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:rank/model/country.dart';
 
 class DetailPage extends StatefulWidget {
   static String routeName = '/detail';
@@ -24,6 +26,7 @@ class DetailState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
+    print(Provider.of<CountryModel>(context, listen: false).country());
   }
 
   @override

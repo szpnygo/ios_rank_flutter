@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:provider/provider.dart';
+import 'package:rank/model/country.dart';
 import 'package:rank/ui/detail_page.dart';
 
 class AppPage extends StatefulWidget {
@@ -44,7 +46,7 @@ class AppState extends State<AppPage> {
               ),
             ),
             GestureDetector(
-              onTap: () => {print("ssss")},
+              onTap: () => {_selectCountry()},
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(
@@ -249,5 +251,12 @@ class AppState extends State<AppPage> {
         }
     }
     return url;
+  }
+
+  _selectCountry() {
+    print("select country");
+    print(Provider.of<CountryModel>(context).country());
+    Provider.of<CountryModel>(context).changeCountry("test");
+    print(Provider.of<CountryModel>(context).country());
   }
 }
