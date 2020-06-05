@@ -1,5 +1,10 @@
+import 'dart:collection';
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:rank/model/country.dart';
 
@@ -17,6 +22,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class DetailState extends State<DetailPage> {
+
   final String appId;
 
   DetailState({Key key, this.appId}) {
@@ -26,7 +32,6 @@ class DetailState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    print(Provider.of<CountryModel>(context, listen: false).country());
   }
 
   @override
@@ -41,38 +46,67 @@ class DetailState extends State<DetailPage> {
         elevation: 0,
         centerTitle: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _header(),
-              Divider(),
-              _function(),
-              Divider(),
-              _images(),
-              Divider(),
-              _content(),
-              Divider(),
-              _info(),
-            ],
-          ),
+      body: FutureBuilder<List<dynamic>>(
+        future: _requestData(
+            appId,
+            Provider.of<CountryModel>(
+              context,
+              listen: false,
+            ).country()),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return _body(snapshot.data[0]);
+          } else {
+            return Container(
+              color: Color.fromRGBO(255, 255, 255, 65),
+              child: Center(
+                child: LoadingJumpingLine.circle(
+                  duration: const Duration(milliseconds: 1000),
+                  backgroundColor: Colors.lightBlue,
+                ),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Padding _body(Map<String,dynamic> appInfo) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _header(appInfo),
+            Divider(),
+            _function(appInfo),
+            Divider(),
+            _images(appInfo),
+            Divider(),
+            _content(appInfo),
+            Divider(),
+            _info(appInfo),
+          ],
         ),
       ),
     );
   }
 
-  _header() {
+  _header(Map<String,dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Image.network(
-            "https://www.smemo.info/icon.png",
-            width: 96,
-            height: 96,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.network(
+              appInfo["artworkUrl100"],
+              width: 96,
+              height: 96,
+            ),
           ),
           Expanded(
             child: Padding(
@@ -82,7 +116,7 @@ class DetailState extends State<DetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "抖音短视频",
+                    appInfo["trackName"],
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -90,7 +124,7 @@ class DetailState extends State<DetailPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      "com.ss.iphone.ugc.Aweme.sdfsdfsdfsdfsdf",
+                      appInfo["bundleId"],
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 16,
@@ -103,7 +137,7 @@ class DetailState extends State<DetailPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      "评分：5.6",
+                      "评分：" + appInfo["averageUserRating"].toString(),
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -120,7 +154,7 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  _function() {
+  _function(Map<String,dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Column(
@@ -137,7 +171,7 @@ class DetailState extends State<DetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "版本 11.3.0",
+                "版本 " + appInfo["version"],
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -145,7 +179,7 @@ class DetailState extends State<DetailPage> {
                 ),
               ),
               Text(
-                "2020-06-03T11:29:27Z",
+                appInfo["currentVersionReleaseDate"],
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -157,7 +191,7 @@ class DetailState extends State<DetailPage> {
           Padding(
             padding: const EdgeInsets.only(top: 12),
             child: Text(
-              "1.2.0版本更新\n\n【更新与调整】\n- 修正了其他的一些问题",
+              appInfo["releaseNotes"],
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 14,
@@ -169,7 +203,7 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  _images() {
+  _images(Map<String,dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 8),
       child: Column(
@@ -190,11 +224,11 @@ class DetailState extends State<DetailPage> {
                 return Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Image.network(
-                    "https://is5-ssl.mzstatic.com/image/thumb/Purple113/v4/33/b5/85/33b58528-e927-3d6a-bfbb-6a4d83779a67/pr_source.jpg/406x228bb.jpg",
+                    appInfo["screenshotUrls"][index],
                   ),
                 );
               },
-              itemCount: 6,
+              itemCount: appInfo["screenshotUrls"].length,
             ),
           )
         ],
@@ -202,17 +236,17 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  _content() {
+  _content(Map<String,dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 8),
       child: Text(
-        "时间规划局是一款提醒事项与时间管理的App，\nQQ：1217619769",
+        appInfo["description"],
         style: TextStyle(),
       ),
     );
   }
 
-  _info() {
+  _info(Map<String,dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 128),
       child: Column(
@@ -233,8 +267,7 @@ class DetailState extends State<DetailPage> {
                 Expanded(
                   child: _InfoWidget(
                     title: "供应商",
-                    content:
-                        "Zhejiang Secret Magic Cube Network Technology Co., Ltd",
+                    content: appInfo["artistName"],
                   ),
                 )
               ],
@@ -247,15 +280,15 @@ class DetailState extends State<DetailPage> {
               children: <Widget>[
                 _InfoWidget(
                   title: "价格",
-                  content: "免费",
+                  content: appInfo["formattedPrice"],
                 ),
                 _InfoWidget(
                   title: "大小",
-                  content: "123MB",
+                  content: appInfo["fileSizeBytes"],
                 ),
                 _InfoWidget(
                   title: "年龄分级",
-                  content: "12+",
+                  content: appInfo["contentAdvisoryRating"],
                 ),
               ],
             ),
@@ -263,6 +296,16 @@ class DetailState extends State<DetailPage> {
         ],
       ),
     );
+  }
+
+  Future<List<dynamic>> _requestData(String appId, String country) async {
+    var url =
+        "https://itunes.apple.com/lookup?id=" + appId + "&country=" + country;
+    print(url);
+    var response = await Dio().get(url);
+    var result = json.decode(response.data);
+
+    return result["results"];
   }
 }
 

@@ -255,8 +255,5 @@ class AppState extends State<AppPage> {
 
   _selectCountry() {
     print("select country");
-    print(Provider.of<CountryModel>(context).country());
-    Provider.of<CountryModel>(context).changeCountry("test");
-    print(Provider.of<CountryModel>(context).country());
   }
 }
