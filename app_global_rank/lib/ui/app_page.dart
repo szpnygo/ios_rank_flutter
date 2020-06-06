@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
-import 'package:provider/provider.dart';
-import 'package:rank/model/country.dart';
 import 'package:rank/ui/detail_page.dart';
 
 class AppPage extends StatefulWidget {
@@ -101,8 +99,11 @@ class AppState extends State<AppPage> {
     );
   }
 
+  final _controller = ScrollController();
+
   ListView _buildListView() {
     return ListView.builder(
+      controller: _controller,
       itemBuilder: (BuildContext context, int index) {
         return _itemWidget(index);
       },
@@ -201,6 +202,7 @@ class AppState extends State<AppPage> {
     setState(() {
       _appList = response.data["feed"]["results"];
       _isLoading = false;
+      _controller.jumpTo(0);
     });
   }
 
