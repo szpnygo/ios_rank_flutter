@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:rank/model/country.dart';
+import 'package:rank/widgets/InfoWidget.dart';
 
 class DetailPage extends StatefulWidget {
   static String routeName = '/detail';
@@ -136,7 +137,9 @@ class DetailState extends State<DetailPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      "评分：" + appInfo["averageUserRating"].toString(),
+                      "评分：" +
+                          _getAppRating(double.parse(
+                              appInfo["averageUserRating"].toString())),
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -203,6 +206,7 @@ class DetailState extends State<DetailPage> {
   }
 
   _images(Map<String, dynamic> appInfo) {
+    var _height = _getImageHeight(appInfo["screenshotUrls"][0]).toDouble();
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 8),
       child: Column(
@@ -216,9 +220,10 @@ class DetailState extends State<DetailPage> {
             ),
           ),
           Container(
-            height: 200,
+            height: _height,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              physics: const ClampingScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -264,7 +269,7 @@ class DetailState extends State<DetailPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: _InfoWidget(
+                  child: InfoWidget(
                     title: "供应商",
                     content: appInfo["artistName"],
                   ),
@@ -277,15 +282,15 @@ class DetailState extends State<DetailPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                _InfoWidget(
+                InfoWidget(
                   title: "价格",
                   content: appInfo["formattedPrice"],
                 ),
-                _InfoWidget(
+                InfoWidget(
                   title: "大小",
-                  content: appInfo["fileSizeBytes"],
+                  content: _getAppSize(double.parse(appInfo["fileSizeBytes"])),
                 ),
-                _InfoWidget(
+                InfoWidget(
                   title: "年龄分级",
                   content: appInfo["contentAdvisoryRating"],
                 ),
@@ -297,6 +302,33 @@ class DetailState extends State<DetailPage> {
     );
   }
 
+  _getAppSize(double size) {
+    return (size / 1024 / 1024).toStringAsFixed(2) + "MB";
+  }
+
+  _getAppRating(double rate) {
+    return rate.toStringAsFixed(2);
+  }
+
+  int _getImageHeight(String imgUrl) {
+    try {
+      var list = imgUrl.split("/");
+      var fileName = list[list.length - 1];
+      fileName = fileName.replaceAll("bb.png", "");
+      fileName = fileName.replaceAll("bb.jpg", "");
+      fileName = fileName.replaceAll("bb.jpeg", "");
+
+      var width = fileName.split("x")[0];
+      var height = fileName.split("x")[1];
+      if (int.parse(width) > int.parse(height)) {
+        return 200;
+      } else {
+        return 400;
+      }
+    } catch (e) {}
+    return 200;
+  }
+
   Future<List<dynamic>> _requestData(String appId, String country) async {
     var url =
         "https://itunes.apple.com/lookup?id=" + appId + "&country=" + country;
@@ -305,29 +337,5 @@ class DetailState extends State<DetailPage> {
     var result = json.decode(response.data);
 
     return result["results"];
-  }
-}
-
-class _InfoWidget extends StatelessWidget {
-  final String title;
-  final String content;
-
-  const _InfoWidget({Key key, this.title, this.content}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          title,
-          style: TextStyle(color: Colors.grey[500]),
-        ),
-        Text(
-          content,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    );
   }
 }

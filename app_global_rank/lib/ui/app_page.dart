@@ -21,8 +21,6 @@ class AppState extends State<AppPage> {
 
   bool _isLoading = false;
 
-  AppState() {}
-
   @override
   void initState() {
     super.initState();
