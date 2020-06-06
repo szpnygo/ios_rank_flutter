@@ -237,7 +237,7 @@ class DetailState extends State<DetailPage> {
 
   _content(Map<String, dynamic> appInfo) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 8),
+      padding: const EdgeInsets.only(top: 16, bottom: 12),
       child: Text(
         appInfo["description"],
         style: TextStyle(),

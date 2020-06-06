@@ -110,7 +110,7 @@ class AppState extends State<AppPage> {
   ListView _buildListView() {
     return ListView.builder(
       physics: const ClampingScrollPhysics(),
-      itemExtent: 96,
+      itemExtent: 88,
       controller: _controller,
       itemBuilder: (BuildContext context, int index) {
         return _itemWidget(index);
@@ -154,8 +154,8 @@ class AppState extends State<AppPage> {
               borderRadius: BorderRadius.circular(16),
               child: CachedNetworkImage(
                 imageUrl: item["artworkUrl100"],
-                width: 72,
-                height: 72,
+                width: 64,
+                height: 64,
               ),
             ),
             Padding(
@@ -174,11 +174,11 @@ class AppState extends State<AppPage> {
                     Text(
                       item["name"],
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.fade,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
