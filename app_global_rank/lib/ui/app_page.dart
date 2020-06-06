@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,27 +83,34 @@ class AppState extends State<AppPage> {
       body: Stack(
         children: <Widget>[
           _buildListView(),
-          Offstage(
-            offstage: !_isLoading,
-            child: Container(
-              color: Color.fromRGBO(255, 255, 255, 65),
-              child: Center(
-                child: LoadingJumpingLine.circle(
-                  duration: const Duration(milliseconds: 1000),
-                  backgroundColor: Colors.lightBlue,
-                ),
-              ),
-            ),
-          ),
+          _getLoading(),
         ],
       ),
     );
+  }
+
+  _getLoading(){
+    if(_isLoading){
+      return Container(
+        color: Color.fromRGBO(255, 255, 255, 65),
+        child: Center(
+          child: LoadingJumpingLine.circle(
+            duration: const Duration(milliseconds: 1000),
+            backgroundColor: Colors.lightBlue,
+          ),
+        ),
+      );
+    }else{
+      return Container();
+    }
   }
 
   final _controller = ScrollController();
 
   ListView _buildListView() {
     return ListView.builder(
+      physics: const ClampingScrollPhysics(),
+      itemExtent: 96,
       controller: _controller,
       itemBuilder: (BuildContext context, int index) {
         return _itemWidget(index);
@@ -144,8 +152,8 @@ class AppState extends State<AppPage> {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.network(
-                item["artworkUrl100"],
+              child: CachedNetworkImage(
+                imageUrl: item["artworkUrl100"],
                 width: 72,
                 height: 72,
               ),

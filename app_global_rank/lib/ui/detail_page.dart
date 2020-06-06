@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ class DetailPage extends StatefulWidget {
 }
 
 class DetailState extends State<DetailPage> {
-
   final String appId;
 
   DetailState({Key key, this.appId}) {
@@ -71,7 +71,7 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  Padding _body(Map<String,dynamic> appInfo) {
+  Padding _body(Map<String, dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
       child: SingleChildScrollView(
@@ -93,7 +93,7 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  _header(Map<String,dynamic> appInfo) {
+  _header(Map<String, dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 16),
       child: Row(
@@ -101,8 +101,8 @@ class DetailState extends State<DetailPage> {
         children: <Widget>[
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              appInfo["artworkUrl100"],
+            child: CachedNetworkImage(
+              imageUrl: appInfo["artworkUrl100"],
               width: 96,
               height: 96,
             ),
@@ -153,7 +153,7 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  _function(Map<String,dynamic> appInfo) {
+  _function(Map<String, dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Column(
@@ -202,7 +202,7 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  _images(Map<String,dynamic> appInfo) {
+  _images(Map<String, dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 8),
       child: Column(
@@ -222,8 +222,8 @@ class DetailState extends State<DetailPage> {
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Image.network(
-                    appInfo["screenshotUrls"][index],
+                  child: CachedNetworkImage(
+                    imageUrl: appInfo["screenshotUrls"][index],
                   ),
                 );
               },
@@ -235,7 +235,7 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  _content(Map<String,dynamic> appInfo) {
+  _content(Map<String, dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 8),
       child: Text(
@@ -245,7 +245,7 @@ class DetailState extends State<DetailPage> {
     );
   }
 
-  _info(Map<String,dynamic> appInfo) {
+  _info(Map<String, dynamic> appInfo) {
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 128),
       child: Column(
