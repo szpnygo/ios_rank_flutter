@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -20,6 +21,16 @@ class AppState extends State<AppPage> {
   int _bottomSelectedIndex = 2;
 
   bool _isLoading = false;
+
+  Dio dio = Dio();
+
+  AppState() {
+    dio.interceptors.add(
+      DioCacheManager(
+        CacheConfig(),
+      ).interceptor,
+    );
+  }
 
   @override
   void initState() {
@@ -87,8 +98,8 @@ class AppState extends State<AppPage> {
     );
   }
 
-  _getLoading(){
-    if(_isLoading){
+  _getLoading() {
+    if (_isLoading) {
       return Container(
         color: Color.fromRGBO(255, 255, 255, 65),
         child: Center(
@@ -98,7 +109,7 @@ class AppState extends State<AppPage> {
           ),
         ),
       );
-    }else{
+    } else {
       return Container();
     }
   }
@@ -204,7 +215,13 @@ class AppState extends State<AppPage> {
     });
     print("request");
     var url = _getRequestUrl();
-    var response = await Dio().get(url);
+    var response = await dio.get(
+      url,
+      options: buildCacheOptions(
+        Duration(hours: 2),
+        maxStale: Duration(days: 1),
+      ),
+    );
     setState(() {
       _appList = response.data["feed"]["results"];
       _isLoading = false;

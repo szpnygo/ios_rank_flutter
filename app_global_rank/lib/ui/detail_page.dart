@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -25,8 +26,15 @@ class DetailPage extends StatefulWidget {
 class DetailState extends State<DetailPage> {
   final String appId;
 
+  Dio dio = Dio();
+
   DetailState({Key key, this.appId}) {
     print("appId : " + this.appId);
+    dio.interceptors.add(
+      DioCacheManager(
+        CacheConfig(),
+      ).interceptor,
+    );
   }
 
   @override
@@ -333,7 +341,13 @@ class DetailState extends State<DetailPage> {
     var url =
         "https://itunes.apple.com/lookup?id=" + appId + "&country=" + country;
     print(url);
-    var response = await Dio().get(url);
+    var response = await dio.get(
+      url,
+      options: buildCacheOptions(
+        Duration(hours: 6),
+        maxStale: Duration(days: 7),
+      ),
+    );
     var result = json.decode(response.data);
 
     return result["results"];
