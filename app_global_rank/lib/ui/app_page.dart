@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
-import 'package:rank/ui/detail_page.dart';
+import 'package:rank/generated/l10n.dart';
 import 'package:rank/widgets/app_item_widget.dart';
 
 class AppPage extends StatefulWidget {
@@ -71,18 +70,22 @@ class AppState extends State<AppPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.pets), title: Text("新鲜App")),
-          BottomNavigationBarItem(icon: Icon(Icons.games), title: Text("本周新游")),
-          BottomNavigationBarItem(icon: Icon(Icons.apps), title: Text("免费排行")),
           BottomNavigationBarItem(
-              icon: Icon(Icons.redeem), title: Text("畅销排行")),
+              icon: Icon(Icons.pets), title: Text(S.of(context).newApp)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), title: Text("付费排行")),
+              icon: Icon(Icons.games), title: Text(S.of(context).newGame)),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.apps), title: Text(S.of(context).topFree)),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.redeem), title: Text(S.of(context).topGrossing)),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart),
+              title: Text(S.of(context).topPaid)),
         ],
         currentIndex: _bottomSelectedIndex,
         onTap: (index) => {_bottomClick(index)},
-        unselectedFontSize: 12,
-        selectedFontSize: 14,
+        unselectedFontSize: 10,
+        selectedFontSize: 12,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey[400],
         backgroundColor: Colors.grey[50],

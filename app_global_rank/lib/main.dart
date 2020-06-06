@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:rank/generated/l10n.dart';
 import 'package:rank/model/country.dart';
 import 'package:rank/ui/app_page.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +28,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'iOS全球应用排行榜',
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      onGenerateTitle: (BuildContext context) => S.of(context).appName,
       theme: ThemeData(
           backgroundColor: Colors.white,
           primaryColor: Colors.white,
