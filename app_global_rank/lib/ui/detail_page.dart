@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:rank/model/country.dart';
-import 'package:rank/widgets/InfoWidget.dart';
+import 'package:rank/widgets/image_item_widget.dart';
+import 'package:rank/widgets/info_widget.dart';
 
 class DetailPage extends StatefulWidget {
   static String routeName = '/detail';
@@ -233,12 +234,7 @@ class DetailState extends State<DetailPage> {
               scrollDirection: Axis.horizontal,
               physics: const ClampingScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: CachedNetworkImage(
-                    imageUrl: appInfo["screenshotUrls"][index],
-                  ),
-                );
+                return ImageItemWidget(url: appInfo["screenshotUrls"][index],);
               },
               itemCount: appInfo["screenshotUrls"].length,
             ),
@@ -353,3 +349,5 @@ class DetailState extends State<DetailPage> {
     return result["results"];
   }
 }
+
+
