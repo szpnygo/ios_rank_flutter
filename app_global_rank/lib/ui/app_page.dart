@@ -9,6 +9,7 @@ import 'package:rank/generated/l10n.dart';
 import 'package:rank/model/country.dart';
 import 'package:rank/widgets/app_item_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPage extends StatefulWidget {
   static String routeName = '/app';
@@ -206,7 +207,7 @@ class AppState extends State<AppPage> {
         listen: false,
       ).country();
     });
-
+    _getPreCountry();
     _requestData();
   }
 
@@ -221,7 +222,9 @@ class AppState extends State<AppPage> {
             Padding(
               padding: const EdgeInsets.only(left: 8),
               child: Text(
-                S.of(context).rank,
+                S
+                    .of(context)
+                    .rank,
                 style: TextStyle(fontSize: 36),
               ),
             ),
@@ -243,16 +246,26 @@ class AppState extends State<AppPage> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.pets), title: Text(S.of(context).newApp)),
+              icon: Icon(Icons.pets), title: Text(S
+              .of(context)
+              .newApp)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.games), title: Text(S.of(context).newGame)),
+              icon: Icon(Icons.games), title: Text(S
+              .of(context)
+              .newGame)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.apps), title: Text(S.of(context).topFree)),
+              icon: Icon(Icons.apps), title: Text(S
+              .of(context)
+              .topFree)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.redeem), title: Text(S.of(context).topGrossing)),
+              icon: Icon(Icons.redeem), title: Text(S
+              .of(context)
+              .topGrossing)),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
-              title: Text(S.of(context).topPaid)),
+              title: Text(S
+                  .of(context)
+                  .topPaid)),
         ],
         currentIndex: _bottomSelectedIndex,
         onTap: (index) => {_bottomClick(index)},
@@ -402,7 +415,8 @@ class AppState extends State<AppPage> {
               children: <Widget>[
                 Expanded(
                   child: ListView.builder(
-                    controller: ScrollController(initialScrollOffset: 40 * _selectedIndex.toDouble()),
+                    controller: ScrollController(
+                        initialScrollOffset: 40 * _selectedIndex.toDouble()),
                     itemExtent: 40,
                     itemBuilder: (BuildContext context, int index) {
                       return _CountryWidget(
@@ -430,12 +444,28 @@ class AppState extends State<AppPage> {
     Navigator.pop(context);
     setState(() {
       country = _countryList[index];
+      _savePreCountry(country);
       Provider.of<CountryModel>(
         context,
         listen: false,
       ).changeCountry(country);
       _requestData();
     });
+  }
+
+  _savePreCountry(String c) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("country", country);
+  }
+
+  _getPreCountry() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var c = prefs.getString("country");
+    if(c != null){
+      setState(() {
+        country = c;
+      });
+    }
   }
 }
 
