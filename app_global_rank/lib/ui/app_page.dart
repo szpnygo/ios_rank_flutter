@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:rank/generated/l10n.dart';
 import 'package:rank/widgets/app_item_widget.dart';
+import 'package:intl/intl.dart';
 
 class AppPage extends StatefulWidget {
   static String routeName = '/app';
@@ -16,6 +18,164 @@ class AppPage extends StatefulWidget {
 }
 
 class AppState extends State<AppPage> {
+  List<String> _countryList = [
+    "us",
+    "gb",
+    "jp",
+    "de",
+    "fr",
+    "cn",
+    "hk",
+    "tw",
+    "mo",
+    "br",
+    "dk",
+    "eg",
+    "n_in",
+    "th",
+    "vn",
+    "kr",
+    "fi",
+    "it",
+    "bh",
+    "bj",
+    "bt",
+    "bn",
+    "td",
+    "cl",
+    "fj",
+    "gh",
+    "gr",
+    "ru",
+    "jo",
+    "la",
+    "ml",
+    "mn",
+    "nl",
+    "no",
+    "om",
+    "pw",
+    "pe",
+    "pl",
+    "ch",
+    "za",
+    "ar",
+    "ca",
+    "il",
+    "ph",
+    "se",
+    "ye",
+    "n_is",
+    "ao",
+    "bs",
+    "be",
+    "bz",
+    "bm",
+    "kh",
+    "cv",
+    "es",
+    "gm",
+    "gy",
+    "ie",
+    "jm",
+    "ke",
+    "kw",
+    "lb",
+    "lt",
+    "lu",
+    "mk",
+    "hu",
+    "mw",
+    "mt",
+    "mx",
+    "np",
+    "nz",
+    "ne",
+    "at",
+    "pa",
+    "py",
+    "sg",
+    "pt",
+    "sc",
+    "sr",
+    "tn",
+    "tr",
+    "ug",
+    "qa",
+    "ae",
+    "ua",
+    "uy",
+    "ai",
+    "am",
+    "au",
+    "az",
+    "bb",
+    "by",
+    "bo",
+    "bw",
+    "ky",
+    "co",
+    "cy",
+    "dm",
+    "ec",
+    "ee",
+    "sv",
+    "gd",
+    "gt",
+    "hn",
+    "hr",
+    "lv",
+    "lr",
+    "my",
+    "mu",
+    "md",
+    "mz",
+    "na",
+    "ni",
+    "ng",
+    "pk",
+    "ro",
+    "lc",
+    "sn",
+    "sl",
+    "sk",
+    "lk",
+    "sz",
+    "tz",
+    "ve",
+    "zw",
+    "bg",
+    "al",
+    "dz",
+    "bf",
+    "cg",
+    "cr",
+    "cz",
+    "gw",
+    "id",
+    "kz",
+    "mg",
+    "mr",
+    "ms",
+    "sa",
+    "si",
+    "sb",
+    "tj",
+    "tm",
+    "kg",
+    "uz",
+    "ag",
+    "pg",
+    "n_do",
+    "kn",
+    "vg",
+    "fm",
+    "st",
+    "tt",
+    "tc",
+    "vc"
+  ];
+
   List<dynamic> _appList = List<dynamic>();
 
   int _bottomSelectedIndex = 2;
@@ -220,7 +380,7 @@ class AppState extends State<AppPage> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return SizedBox(
-          height: 300,
+          height: 360,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -232,23 +392,70 @@ class AppState extends State<AppPage> {
                       onPressed: () => {Navigator.pop(context)},
                       child: Text(
                         S.of(context).cancel,
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18),
                       ),
                     ),
                     FlatButton(
                       onPressed: null,
                       child: Text(
                         S.of(context).confirm,
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18),
                       ),
                     ),
                   ],
                 ),
+                Expanded(
+                  child: ListView.builder(
+                    itemExtent: 40,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _CountryWidget(
+                        title: Intl.message(
+                          _countryList[index],
+                          name: _countryList[index],
+                        ),
+                        selected: index == 5,
+                      );
+                    },
+                    itemCount: _countryList.length,
+                  ),
+                )
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _CountryWidget extends StatelessWidget {
+  final String title;
+  final bool selected;
+
+  const _CountryWidget({Key key, this.title, this.selected}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var color = Colors.grey;
+    var weight = FontWeight.normal;
+    if (selected) {
+      color = Colors.blue;
+      weight = FontWeight.bold;
+    }
+    return Center(
+      child: Text(
+        title,
+        style: TextStyle(
+          color: color,
+          fontWeight: weight,
+        ),
+      ),
     );
   }
 }
