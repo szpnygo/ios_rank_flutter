@@ -14,5 +14,7 @@
   "company": "Provider",
   "price": "Price",
   "size": "Size",
-  "age": "Age Rating"
+  "age": "Age Rating",
+  "cancel": "Cancel",
+  "confirm": "Confirm"
 }

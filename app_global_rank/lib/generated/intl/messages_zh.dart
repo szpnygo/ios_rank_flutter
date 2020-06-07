@@ -23,7 +23,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "age" : MessageLookupByLibrary.simpleMessage("年龄分级"),
     "appName" : MessageLookupByLibrary.simpleMessage("iOS应用全球排行榜"),
+    "cancel" : MessageLookupByLibrary.simpleMessage("取消"),
     "company" : MessageLookupByLibrary.simpleMessage("供应商"),
+    "confirm" : MessageLookupByLibrary.simpleMessage("确认"),
     "function" : MessageLookupByLibrary.simpleMessage("新功能"),
     "info" : MessageLookupByLibrary.simpleMessage("信息"),
     "look" : MessageLookupByLibrary.simpleMessage("预览"),

@@ -215,5 +215,40 @@ class AppState extends State<AppPage> {
 
   _selectCountry() {
     print("select country");
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 300,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    FlatButton(
+                      onPressed: () => {Navigator.pop(context)},
+                      child: Text(
+                        S.of(context).cancel,
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: null,
+                      child: Text(
+                        S.of(context).confirm,
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
