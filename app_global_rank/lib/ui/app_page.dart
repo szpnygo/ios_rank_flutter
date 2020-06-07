@@ -20,6 +20,7 @@ class AppPage extends StatefulWidget {
 }
 
 class AppState extends State<AppPage> {
+
   List<String> _countryList = [
     "us",
     "gb",
@@ -386,6 +387,8 @@ class AppState extends State<AppPage> {
     return url;
   }
 
+  int _selectedIndex = 0;
+
   _selectCountry() {
     showModalBottomSheet(
       context: context,
@@ -399,6 +402,7 @@ class AppState extends State<AppPage> {
               children: <Widget>[
                 Expanded(
                   child: ListView.builder(
+                    controller: ScrollController(initialScrollOffset: 40 * _selectedIndex.toDouble()),
                     itemExtent: 40,
                     itemBuilder: (BuildContext context, int index) {
                       return _CountryWidget(
@@ -422,6 +426,7 @@ class AppState extends State<AppPage> {
   }
 
   _clickCountry(int index) {
+    _selectedIndex = index;
     Navigator.pop(context);
     setState(() {
       country = _countryList[index];

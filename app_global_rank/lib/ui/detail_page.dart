@@ -356,7 +356,8 @@ class DetailState extends State<DetailPage> {
   Future<List<dynamic>> _requestData(String appId, String country) async {
 
     var url =
-        "https://itunes.apple.com/lookup?id=" + appId + "&country=" + S.of(context).lang;;
+        "https://itunes.apple.com/lookup?id=" + appId + "&country=" + S.of(context).lang;
+    print(url);
     var response = await dio.get(
       url,
       options: buildCacheOptions(
@@ -368,6 +369,7 @@ class DetailState extends State<DetailPage> {
 
     if (result["results"].length == 0) {
       url = "https://itunes.apple.com/lookup?id=" + appId + "&country=" + country;
+      print(url);
       var response = await dio.get(
         url,
         options: buildCacheOptions(
