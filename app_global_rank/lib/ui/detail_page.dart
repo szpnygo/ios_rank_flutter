@@ -31,7 +31,6 @@ class DetailState extends State<DetailPage> {
   Dio dio = Dio();
 
   DetailState({Key key, this.appId}) {
-    print("appId : " + this.appId);
     dio.interceptors.add(
       DioCacheManager(
         CacheConfig(),
@@ -358,7 +357,6 @@ class DetailState extends State<DetailPage> {
 
     var url =
         "https://itunes.apple.com/lookup?id=" + appId + "&country=" + S.of(context).lang;;
-    print(url);
     var response = await dio.get(
       url,
       options: buildCacheOptions(
@@ -369,9 +367,7 @@ class DetailState extends State<DetailPage> {
     var result = json.decode(response.data);
 
     if (result["results"].length == 0) {
-
       url = "https://itunes.apple.com/lookup?id=" + appId + "&country=" + country;
-      print(url);
       var response = await dio.get(
         url,
         options: buildCacheOptions(

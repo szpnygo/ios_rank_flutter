@@ -319,7 +319,6 @@ class AppState extends State<AppPage> {
     setState(() {
       _isLoading = true;
     });
-    print("request");
     var url = _getRequestUrl();
     var response = await dio.get(
       url,
@@ -384,12 +383,10 @@ class AppState extends State<AppPage> {
               "/ios-apps/top-free/all/100/explicit.json";
         }
     }
-    print("request url " + url);
     return url;
   }
 
   _selectCountry() {
-    print("select country");
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
