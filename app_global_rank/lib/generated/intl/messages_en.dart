@@ -21,11 +21,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "age" : MessageLookupByLibrary.simpleMessage("Age Rating"),
     "appName" : MessageLookupByLibrary.simpleMessage("NewApp"),
+    "company" : MessageLookupByLibrary.simpleMessage("Provider"),
+    "function" : MessageLookupByLibrary.simpleMessage("Function"),
+    "info" : MessageLookupByLibrary.simpleMessage("Info"),
+    "look" : MessageLookupByLibrary.simpleMessage("Preview"),
     "newApp" : MessageLookupByLibrary.simpleMessage("NewApp"),
     "newGame" : MessageLookupByLibrary.simpleMessage("NewGame"),
+    "price" : MessageLookupByLibrary.simpleMessage("Price"),
+    "rank" : MessageLookupByLibrary.simpleMessage("Rank"),
+    "rate" : MessageLookupByLibrary.simpleMessage("Rate: "),
+    "size" : MessageLookupByLibrary.simpleMessage("Size"),
     "topFree" : MessageLookupByLibrary.simpleMessage("TopFree"),
     "topGrossing" : MessageLookupByLibrary.simpleMessage("TopGrossing"),
-    "topPaid" : MessageLookupByLibrary.simpleMessage("TopPaid")
+    "topPaid" : MessageLookupByLibrary.simpleMessage("TopPaid"),
+    "version" : MessageLookupByLibrary.simpleMessage("Version")
   };
 }

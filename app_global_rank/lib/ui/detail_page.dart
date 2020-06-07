@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
+import 'package:rank/generated/l10n.dart';
 import 'package:rank/model/country.dart';
 import 'package:rank/widgets/image_item_widget.dart';
 import 'package:rank/widgets/info_widget.dart';
@@ -146,7 +147,7 @@ class DetailState extends State<DetailPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      "评分：" +
+                      S.of(context).rate +
                           _getAppRating(double.parse(
                               appInfo["averageUserRating"].toString())),
                       style: TextStyle(
@@ -174,7 +175,7 @@ class DetailState extends State<DetailPage> {
           Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 8),
             child: Text(
-              "新功能",
+              S.of(context).function,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
           ),
@@ -182,7 +183,7 @@ class DetailState extends State<DetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "版本 " + appInfo["version"],
+                S.of(context).version + " " + appInfo["version"],
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -224,7 +225,7 @@ class DetailState extends State<DetailPage> {
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 4),
             child: Text(
-              "浏览",
+              S.of(context).look,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
           ),
@@ -234,7 +235,9 @@ class DetailState extends State<DetailPage> {
               scrollDirection: Axis.horizontal,
               physics: const ClampingScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
-                return ImageItemWidget(url: appInfo["screenshotUrls"][index],);
+                return ImageItemWidget(
+                  url: appInfo["screenshotUrls"][index],
+                );
               },
               itemCount: appInfo["screenshotUrls"].length,
             ),
@@ -263,7 +266,7 @@ class DetailState extends State<DetailPage> {
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 8),
             child: Text(
-              "信息",
+              S.of(context).info,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
           ),
@@ -274,7 +277,7 @@ class DetailState extends State<DetailPage> {
               children: <Widget>[
                 Expanded(
                   child: InfoWidget(
-                    title: "供应商",
+                    title: S.of(context).company,
                     content: appInfo["artistName"],
                   ),
                 )
@@ -287,15 +290,15 @@ class DetailState extends State<DetailPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 InfoWidget(
-                  title: "价格",
+                  title: S.of(context).price,
                   content: appInfo["formattedPrice"],
                 ),
                 InfoWidget(
-                  title: "大小",
+                  title: S.of(context).size,
                   content: _getAppSize(double.parse(appInfo["fileSizeBytes"])),
                 ),
                 InfoWidget(
-                  title: "年龄分级",
+                  title: S.of(context).age,
                   content: appInfo["contentAdvisoryRating"],
                 ),
               ],
@@ -349,5 +352,3 @@ class DetailState extends State<DetailPage> {
     return result["results"];
   }
 }
-
-

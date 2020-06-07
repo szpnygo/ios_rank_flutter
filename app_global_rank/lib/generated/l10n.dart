@@ -80,6 +80,96 @@ class S {
       args: [],
     );
   }
+
+  String get rank {
+    return Intl.message(
+      'Rank',
+      name: 'rank',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get function {
+    return Intl.message(
+      'Function',
+      name: 'function',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get look {
+    return Intl.message(
+      'Preview',
+      name: 'look',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get info {
+    return Intl.message(
+      'Info',
+      name: 'info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get rate {
+    return Intl.message(
+      'Rate: ',
+      name: 'rate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get version {
+    return Intl.message(
+      'Version',
+      name: 'version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get company {
+    return Intl.message(
+      'Provider',
+      name: 'company',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get price {
+    return Intl.message(
+      'Price',
+      name: 'price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get size {
+    return Intl.message(
+      'Size',
+      name: 'size',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get age {
+    return Intl.message(
+      'Age Rating',
+      name: 'age',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

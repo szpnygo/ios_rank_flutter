@@ -4,5 +4,16 @@
   "newGame": "本周新游",
   "topFree": "免费排行",
   "topGrossing": "畅销排行",
-  "topPaid": "付费排行"
+  "topPaid": "付费排行",
+  "rank": "排行榜",
+  "function": "新功能",
+  "look": "预览",
+  "info": "信息",
+  "rate": "评分：",
+  "version": "版本",
+  "company": "供应商",
+  "price": "价格",
+  "size": "大小",
+  "age": "年龄分级"
+
 }

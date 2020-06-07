@@ -49,7 +49,7 @@ class AppState extends State<AppPage> {
             Padding(
               padding: const EdgeInsets.only(left: 8),
               child: Text(
-                "排行榜",
+                S.of(context).rank,
                 style: TextStyle(fontSize: 36),
               ),
             ),

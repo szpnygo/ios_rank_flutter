@@ -21,11 +21,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "age" : MessageLookupByLibrary.simpleMessage("年龄分级"),
     "appName" : MessageLookupByLibrary.simpleMessage("iOS应用全球排行榜"),
+    "company" : MessageLookupByLibrary.simpleMessage("供应商"),
+    "function" : MessageLookupByLibrary.simpleMessage("新功能"),
+    "info" : MessageLookupByLibrary.simpleMessage("信息"),
+    "look" : MessageLookupByLibrary.simpleMessage("预览"),
     "newApp" : MessageLookupByLibrary.simpleMessage("新鲜App"),
     "newGame" : MessageLookupByLibrary.simpleMessage("本周新游"),
+    "price" : MessageLookupByLibrary.simpleMessage("价格"),
+    "rank" : MessageLookupByLibrary.simpleMessage("排行榜"),
+    "rate" : MessageLookupByLibrary.simpleMessage("评分："),
+    "size" : MessageLookupByLibrary.simpleMessage("大小"),
     "topFree" : MessageLookupByLibrary.simpleMessage("免费排行"),
     "topGrossing" : MessageLookupByLibrary.simpleMessage("畅销排行"),
-    "topPaid" : MessageLookupByLibrary.simpleMessage("付费排行")
+    "topPaid" : MessageLookupByLibrary.simpleMessage("付费排行"),
+    "version" : MessageLookupByLibrary.simpleMessage("版本")
   };
 }
