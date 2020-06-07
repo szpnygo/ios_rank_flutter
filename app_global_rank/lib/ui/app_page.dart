@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:provider/provider.dart';
 import 'package:rank/generated/l10n.dart';
+import 'package:rank/model/country.dart';
 import 'package:rank/widgets/app_item_widget.dart';
 import 'package:intl/intl.dart';
 
@@ -184,6 +186,8 @@ class AppState extends State<AppPage> {
 
   Dio dio = Dio();
 
+  String country = "us";
+
   AppState() {
     dio.interceptors.add(
       DioCacheManager(
@@ -195,6 +199,13 @@ class AppState extends State<AppPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      country = Provider.of<CountryModel>(
+        context,
+        listen: false,
+      ).country();
+    });
+
     _requestData();
   }
 
@@ -218,7 +229,7 @@ class AppState extends State<AppPage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
                 child: Text(
-                  "「中国」",
+                  "「" + Intl.message(country, name: country) + "」",
                   style: TextStyle(fontSize: 16, color: Colors.grey[400]),
                 ),
               ),
@@ -325,51 +336,55 @@ class AppState extends State<AppPage> {
   }
 
   String _getRequestUrl() {
-    var country = "cn";
     var url = "";
+    var urlCountry = country;
+    if (urlCountry.startsWith("n_")) {
+      urlCountry = urlCountry.replaceAll("n_", "");
+    }
     switch (_bottomSelectedIndex) {
       case 0:
         {
           url = "https://rss.itunes.apple.com/api/v1/" +
-              country +
+              urlCountry +
               "/ios-apps/new-apps-we-love/all/100/explicit.json";
         }
         break;
       case 1:
         {
           url = "https://rss.itunes.apple.com/api/v1/" +
-              country +
+              urlCountry +
               "/ios-apps/new-games-we-love/all/100/explicit.json";
         }
         break;
       case 2:
         {
           url = "https://rss.itunes.apple.com/api/v1/" +
-              country +
+              urlCountry +
               "/ios-apps/top-free/all/100/explicit.json";
         }
         break;
       case 3:
         {
           url = "https://rss.itunes.apple.com/api/v1/" +
-              country +
+              urlCountry +
               "/ios-apps/top-grossing/all/100/explicit.json";
         }
         break;
       case 4:
         {
           url = "https://rss.itunes.apple.com/api/v1/" +
-              country +
+              urlCountry +
               "/ios-apps/top-paid/all/100/explicit.json";
         }
         break;
       default:
         {
           url = "https://rss.itunes.apple.com/api/v1/" +
-              country +
+              urlCountry +
               "/ios-apps/top-free/all/100/explicit.json";
         }
     }
+    print("request url " + url);
     return url;
   }
 
@@ -382,34 +397,9 @@ class AppState extends State<AppPage> {
         return SizedBox(
           height: 360,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    FlatButton(
-                      onPressed: () => {Navigator.pop(context)},
-                      child: Text(
-                        S.of(context).cancel,
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: null,
-                      child: Text(
-                        S.of(context).confirm,
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18),
-                      ),
-                    ),
-                  ],
-                ),
                 Expanded(
                   child: ListView.builder(
                     itemExtent: 40,
@@ -419,7 +409,8 @@ class AppState extends State<AppPage> {
                           _countryList[index],
                           name: _countryList[index],
                         ),
-                        selected: index == 5,
+                        selected: _countryList[index] == country,
+                        onTap: () => {_clickCountry(index)},
                       );
                     },
                     itemCount: _countryList.length,
@@ -432,13 +423,27 @@ class AppState extends State<AppPage> {
       },
     );
   }
+
+  _clickCountry(int index) {
+    Navigator.pop(context);
+    setState(() {
+      country = _countryList[index];
+      Provider.of<CountryModel>(
+        context,
+        listen: false,
+      ).changeCountry(country);
+      _requestData();
+    });
+  }
 }
 
 class _CountryWidget extends StatelessWidget {
   final String title;
   final bool selected;
+  final GestureTapCallback onTap;
 
-  const _CountryWidget({Key key, this.title, this.selected}) : super(key: key);
+  const _CountryWidget({Key key, this.title, this.selected, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -448,12 +453,15 @@ class _CountryWidget extends StatelessWidget {
       color = Colors.blue;
       weight = FontWeight.bold;
     }
-    return Center(
-      child: Text(
-        title,
-        style: TextStyle(
-          color: color,
-          fontWeight: weight,
+    return InkWell(
+      onTap: onTap,
+      child: Center(
+        child: Text(
+          title,
+          style: TextStyle(
+            color: color,
+            fontWeight: weight,
+          ),
         ),
       ),
     );

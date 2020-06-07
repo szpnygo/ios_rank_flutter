@@ -103,6 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ky" : MessageLookupByLibrary.simpleMessage("Cayman Islands"),
     "kz" : MessageLookupByLibrary.simpleMessage("Kazakhstan"),
     "la" : MessageLookupByLibrary.simpleMessage("Lao People\'s Democratic Republic"),
+    "lang" : MessageLookupByLibrary.simpleMessage("us"),
     "lb" : MessageLookupByLibrary.simpleMessage("Lebanon"),
     "lc" : MessageLookupByLibrary.simpleMessage("St. Lucia"),
     "lk" : MessageLookupByLibrary.simpleMessage("Sri Lanka"),

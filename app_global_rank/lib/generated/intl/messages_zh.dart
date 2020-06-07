@@ -103,6 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ky" : MessageLookupByLibrary.simpleMessage("开曼群岛"),
     "kz" : MessageLookupByLibrary.simpleMessage("哈萨克斯坦"),
     "la" : MessageLookupByLibrary.simpleMessage("老挝"),
+    "lang" : MessageLookupByLibrary.simpleMessage("cn"),
     "lb" : MessageLookupByLibrary.simpleMessage("黎巴嫩"),
     "lc" : MessageLookupByLibrary.simpleMessage("圣卢西亚"),
     "lk" : MessageLookupByLibrary.simpleMessage("斯里兰卡"),

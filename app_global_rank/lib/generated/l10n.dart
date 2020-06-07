@@ -27,6 +27,15 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  String get lang {
+    return Intl.message(
+      'us',
+      name: 'lang',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get appName {
     return Intl.message(
       'NewApp',

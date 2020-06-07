@@ -147,7 +147,9 @@ class DetailState extends State<DetailPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      S.of(context).rate +
+                      S
+                          .of(context)
+                          .rate +
                           _getAppRating(double.parse(
                               appInfo["averageUserRating"].toString())),
                       style: TextStyle(
@@ -175,7 +177,9 @@ class DetailState extends State<DetailPage> {
           Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 8),
             child: Text(
-              S.of(context).function,
+              S
+                  .of(context)
+                  .function,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
           ),
@@ -183,7 +187,9 @@ class DetailState extends State<DetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                S.of(context).version + " " + appInfo["version"],
+                S
+                    .of(context)
+                    .version + " " + appInfo["version"],
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -225,7 +231,9 @@ class DetailState extends State<DetailPage> {
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 4),
             child: Text(
-              S.of(context).look,
+              S
+                  .of(context)
+                  .look,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
           ),
@@ -266,7 +274,9 @@ class DetailState extends State<DetailPage> {
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 8),
             child: Text(
-              S.of(context).info,
+              S
+                  .of(context)
+                  .info,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
           ),
@@ -277,7 +287,9 @@ class DetailState extends State<DetailPage> {
               children: <Widget>[
                 Expanded(
                   child: InfoWidget(
-                    title: S.of(context).company,
+                    title: S
+                        .of(context)
+                        .company,
                     content: appInfo["artistName"],
                   ),
                 )
@@ -290,15 +302,21 @@ class DetailState extends State<DetailPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 InfoWidget(
-                  title: S.of(context).price,
+                  title: S
+                      .of(context)
+                      .price,
                   content: appInfo["formattedPrice"],
                 ),
                 InfoWidget(
-                  title: S.of(context).size,
+                  title: S
+                      .of(context)
+                      .size,
                   content: _getAppSize(double.parse(appInfo["fileSizeBytes"])),
                 ),
                 InfoWidget(
-                  title: S.of(context).age,
+                  title: S
+                      .of(context)
+                      .age,
                   content: appInfo["contentAdvisoryRating"],
                 ),
               ],
@@ -337,8 +355,9 @@ class DetailState extends State<DetailPage> {
   }
 
   Future<List<dynamic>> _requestData(String appId, String country) async {
+
     var url =
-        "https://itunes.apple.com/lookup?id=" + appId + "&country=" + country;
+        "https://itunes.apple.com/lookup?id=" + appId + "&country=" + S.of(context).lang;;
     print(url);
     var response = await dio.get(
       url,
@@ -349,6 +368,20 @@ class DetailState extends State<DetailPage> {
     );
     var result = json.decode(response.data);
 
+    if (result["results"].length == 0) {
+
+      url = "https://itunes.apple.com/lookup?id=" + appId + "&country=" + country;
+      print(url);
+      var response = await dio.get(
+        url,
+        options: buildCacheOptions(
+          Duration(hours: 6),
+          maxStale: Duration(days: 7),
+        ),
+      );
+      var result = json.decode(response.data);
+      return result["results"];
+    }
     return result["results"];
   }
 }

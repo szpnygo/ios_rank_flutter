@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CountryModel with ChangeNotifier {
-  String _country = "cn";
+  String _country = "us";
 
   String country() {
     return _country;
