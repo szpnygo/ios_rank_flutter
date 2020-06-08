@@ -387,6 +387,10 @@ class AppState extends State<AppPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+      ),
       builder: (BuildContext context) {
         return SizedBox(
           height: 360,
