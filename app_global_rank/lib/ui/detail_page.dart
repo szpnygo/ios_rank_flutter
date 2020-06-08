@@ -368,6 +368,9 @@ class DetailState extends State<DetailPage> {
     var result = json.decode(response.data);
 
     if (result["results"].length == 0) {
+      if (country.startsWith("n_")) {
+        country = country.replaceAll("n_", "");
+      }
       url = "https://itunes.apple.com/lookup?id=" + appId + "&country=" + country;
       print(url);
       var response = await dio.get(
