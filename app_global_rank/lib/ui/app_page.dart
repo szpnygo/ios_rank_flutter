@@ -21,7 +21,6 @@ class AppPage extends StatefulWidget {
 }
 
 class AppState extends State<AppPage> {
-
   List<String> _countryList = [
     "us",
     "gb",
@@ -201,14 +200,8 @@ class AppState extends State<AppPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      country = Provider.of<CountryModel>(
-        context,
-        listen: false,
-      ).country();
-    });
+    setState(() {});
     _getPreCountry();
-    _requestData();
   }
 
   @override
@@ -222,9 +215,7 @@ class AppState extends State<AppPage> {
             Padding(
               padding: const EdgeInsets.only(left: 8),
               child: Text(
-                S
-                    .of(context)
-                    .rank,
+                S.of(context).rank,
                 style: TextStyle(fontSize: 36),
               ),
             ),
@@ -246,26 +237,16 @@ class AppState extends State<AppPage> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.pets), title: Text(S
-              .of(context)
-              .newApp)),
+              icon: Icon(Icons.pets), title: Text(S.of(context).newApp)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.games), title: Text(S
-              .of(context)
-              .newGame)),
+              icon: Icon(Icons.games), title: Text(S.of(context).newGame)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.apps), title: Text(S
-              .of(context)
-              .topFree)),
+              icon: Icon(Icons.apps), title: Text(S.of(context).topFree)),
           BottomNavigationBarItem(
-              icon: Icon(Icons.redeem), title: Text(S
-              .of(context)
-              .topGrossing)),
+              icon: Icon(Icons.redeem), title: Text(S.of(context).topGrossing)),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
-              title: Text(S
-                  .of(context)
-                  .topPaid)),
+              title: Text(S.of(context).topPaid)),
         ],
         currentIndex: _bottomSelectedIndex,
         onTap: (index) => {_bottomClick(index)},
@@ -458,12 +439,25 @@ class AppState extends State<AppPage> {
     await prefs.setString("country", country);
   }
 
-  _getPreCountry() async{
+  _getPreCountry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var c = prefs.getString("country");
-    if(c != null){
+    if (c != null) {
       setState(() {
         country = c;
+        Provider.of<CountryModel>(
+          context,
+          listen: false,
+        ).changeCountry(c);
+        _requestData();
+      });
+    } else {
+      setState(() {
+        country = Provider.of<CountryModel>(
+          context,
+          listen: false,
+        ).country();
+        _requestData();
       });
     }
   }
